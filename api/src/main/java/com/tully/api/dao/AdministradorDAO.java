@@ -19,20 +19,17 @@ public class AdministradorDAO implements DAO<Administrador> {
     @PersistenceContext
     private EntityManager manager;
 
-    @Override
     @Transactional
     public void salvar(Administrador entidade) {
         manager.persist(entidade);
     }
 
-    @Override
     @Transactional
     public void atualizar(Administrador entidade) {
         entidade.setAtualizadoEm(LocalDate.now());
         manager.merge(entidade);
     }
 
-    @Override
     @Transactional
     public void deletar(Long id) {
         TypedQuery<Administrador> query = manager.createQuery("SELECT a FROM Administrador a WHERE a.id = :id", Administrador.class);
@@ -42,19 +39,29 @@ public class AdministradorDAO implements DAO<Administrador> {
             administrador.setRemovidoEm(LocalDate.now());
             manager.merge(administrador);
         } catch (Exception e){
-            throw e;
+            e.printStackTrace();
         }
     }
 
-    @Override
     public List<Administrador> encontrarTodos() {
         TypedQuery<Administrador> query = manager.createQuery("SELECT a FROM Administrador a WHERE a.removidoEm = NULL", Administrador.class);
         return query.getResultList();
     }
 
-    @Override
     public Administrador encontrarPorId(Long id) {
         Administrador administrador = manager.find(Administrador.class, id);
         return administrador;
+    }
+
+    public Administrador login(String login, String senha) {
+        TypedQuery<Administrador> query = manager.createQuery("SELECT a FROM Administrador a WHERE a.login = :login AND a.senha = :senha", Administrador.class);
+        query.setParameter("login", login);
+        query.setParameter("senha", senha);
+        try {
+            Administrador usuario = query.getSingleResult();
+            return usuario;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

@@ -18,20 +18,17 @@ public class UsuarioDAO implements DAO<Usuario>{
     private EntityManager manager;
 
     @Transactional
-    @Override
     public void salvar(Usuario entidade) {
         manager.persist(entidade);
     }
 
     @Transactional
-    @Override
     public void atualizar(Usuario entidade) {
         entidade.setAtualizadoEm(LocalDate.now());
         manager.merge(entidade);
     }
 
     @Transactional
-    @Override
     public void deletar(Long id) {
         TypedQuery<Usuario> query = manager.createQuery("SELECT u FROM Usuario u WHERE u.id = :id", Usuario.class);
         query.setParameter("id", id);
@@ -40,17 +37,15 @@ public class UsuarioDAO implements DAO<Usuario>{
             usuario.setRemovidoEm(LocalDate.now());
             manager.merge(usuario);
         } catch (Exception e){
-            throw e;
+            e.printStackTrace();
         }
     }
 
-    @Override
     public List<Usuario> encontrarTodos() {
         TypedQuery<Usuario> query = manager.createQuery("SELECT u FROM Usuario u WHERE u.removidoEm = NULL", Usuario.class);
         return query.getResultList();
     }
 
-    @Override
     public Usuario encontrarPorId(Long id) {
         Usuario usuario = manager.find(Usuario.class, id);
         return usuario;

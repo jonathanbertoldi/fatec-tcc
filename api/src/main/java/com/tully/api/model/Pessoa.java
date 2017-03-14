@@ -1,5 +1,8 @@
 package com.tully.api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -17,6 +20,7 @@ public abstract class Pessoa {
     @Column(length = 50, nullable = false, unique = true)
     private String email;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
@@ -80,7 +84,7 @@ public abstract class Pessoa {
     }
 
     public void setSenha(String senha) {
-        this.senha = senha;
+        this.senha = new Md5PasswordEncoder().encodePassword(senha, null);
     }
 
     public LocalDate getCriadoEm() {
