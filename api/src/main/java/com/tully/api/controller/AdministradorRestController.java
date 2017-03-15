@@ -62,25 +62,32 @@ public class AdministradorRestController {
     }
 
     @RequestMapping(value = "/administradores/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> login(@RequestBody String credenciais) {
-        JSONObject jsonCredenciais = new JSONObject(credenciais);
-        Administrador administrador = administradorDAO.login(jsonCredenciais.getString("login"), jsonCredenciais.getString("senha"));
-        if (administrador != null) {
-            String jwt;
-            JSONObject token = new JSONObject();
-            JWTSigner signer = new JWTSigner(SECRET);
-            long iat = System.currentTimeMillis() / 1000;
-            long exp = iat + 120;
+    public ResponseEntity<String> login(@RequestBody Administrador administrador) {
+        try {
+            // recebe um objeto administrador somente com login e senha
+            // no momento que ele é instanciado a senha é criptografada
+            // bate no banco de dados pra saber se o login e a senha criptografada estão corretas
+            administrador = administradorDAO.login(administrador);
+            if (administrador != null) {
+                String jwt;
+                JSONObject token = new JSONObject();
+                JWTSigner signer = new JWTSigner(SECRET);
+                long iat = System.currentTimeMillis() / 1000;
+                long exp = iat + 120;
 
-            HashMap<String, Object> claims = new HashMap<String, Object>();
-            claims.put("iss", ISSUER);
-            claims.put("iat", iat);
-            claims.put("exp", exp);
-            jwt = signer.sign(claims);
-            token.put("token", jwt);
-            return ResponseEntity.ok(token.toString());
-        } else {
-            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+                HashMap<String, Object> claims = new HashMap<String, Object>();
+                claims.put("iss", ISSUER);
+                claims.put("iat", iat);
+                claims.put("exp", exp);
+                jwt = signer.sign(claims);
+                token.put("token", jwt);
+                return ResponseEntity.ok(token.toString());
+            } else {
+                return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
