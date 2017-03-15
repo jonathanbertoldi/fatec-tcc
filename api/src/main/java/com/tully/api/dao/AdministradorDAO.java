@@ -58,10 +58,12 @@ public class AdministradorDAO implements DAO<Administrador> {
         query.setParameter("login", login);
         query.setParameter("senha", senha);
         try {
-            Administrador usuario = query.getSingleResult();
-            return usuario;
+            Administrador administrador = query.getSingleResult();
+            return administrador;
         } catch (Exception e) {
             return null;
         }
     }
+
+
 }

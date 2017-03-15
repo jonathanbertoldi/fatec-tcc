@@ -1,9 +1,11 @@
 package com.tully.api.controller;
 
+import com.auth0.jwt.JWTSigner;
 import com.tully.api.dao.AdministradorDAO;
 import com.tully.api.model.Administrador;
 import com.tully.api.model.Telefone;
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,13 +14,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+
+import static java.security.KeyRep.Type.SECRET;
 
 @CrossOrigin
 @RestController
 public class AdministradorRestController {
 
     private static final Logger logger = Logger.getLogger(AdministradorRestController.class);
+    public static final String ISSUER = "tully.com";
+    public static final String SECRET = "segredo";
 
     @Autowired
     private AdministradorDAO administradorDAO;
@@ -54,5 +61,26 @@ public class AdministradorRestController {
         }
     }
 
+    @RequestMapping(value = "/administradores/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> login(@RequestBody String credenciais) {
+        JSONObject jsonCredenciais = new JSONObject(credenciais);
+        Administrador administrador = administradorDAO.login(jsonCredenciais.getString("login"), jsonCredenciais.getString("senha"));
+        if (administrador != null) {
+            String jwt;
+            JSONObject token = new JSONObject();
+            JWTSigner signer = new JWTSigner(SECRET);
+            long iat = System.currentTimeMillis() / 1000;
+            long exp = iat + 120;
 
+            HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("iss", ISSUER);
+            claims.put("iat", iat);
+            claims.put("exp", exp);
+            jwt = signer.sign(claims);
+            token.put("token", jwt);
+            return ResponseEntity.ok(token.toString());
+        } else {
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
