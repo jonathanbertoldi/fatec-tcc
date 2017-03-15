@@ -1,6 +1,10 @@
 package com.tully.api.model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,7 +19,7 @@ public class Administrador extends Pessoa{
 
     //Relacionamentos * to Many precisam ser mapeados
     @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Telefone> telefones;
+    private List<Telefone> telefones;
 
     public String getCpf() {
         return cpf;
@@ -33,11 +37,29 @@ public class Administrador extends Pessoa{
         this.endereco = endereco;
     }
 
-    public Set<Telefone> getTelefones() {
+    public List<Telefone> getTelefones() {
         return telefones;
     }
 
-    public void setTelefones(Set<Telefone> telefones) {
+    public void setTelefones(List<Telefone> telefones) {
         this.telefones = telefones;
+    }
+
+    public static JSONArray getListaJSONSimples(List<Administrador> administradores) {
+        JSONArray retorno = new JSONArray();
+        for (Administrador administrador: administradores) {
+            retorno.put(getJSONSimples(administrador));
+        }
+        return retorno;
+    }
+
+    public static JSONObject getJSONSimples(Administrador administrador) {
+        JSONObject retorno = new JSONObject();
+        retorno.put("id", administrador.getId());
+        retorno.put("nome", administrador.getNome());
+        retorno.put("cpf",administrador.getCpf());
+        retorno.put("email",administrador.getEmail());
+        retorno.put("login",administrador.getLogin());
+        return retorno;
     }
 }

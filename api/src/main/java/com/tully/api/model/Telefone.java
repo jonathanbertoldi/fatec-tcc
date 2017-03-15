@@ -1,8 +1,11 @@
 package com.tully.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
+@JsonIgnoreProperties("administrador")
 public class Telefone {
 
     @Id
@@ -12,11 +15,12 @@ public class Telefone {
     @Column(nullable = false)
     private String descricao;
 
-    @Column(length = 14, nullable = false)
+    @Column(nullable = false)
     private String numero;
 
+    // TODO: arrumar o not null do administrador_id
     @ManyToOne
-    @JoinColumn(name = "administrador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_telefone_administrador"))
+    @JoinColumn(name = "administrador_id")
     private Administrador administrador;
 
     public Long getId() {
@@ -41,5 +45,13 @@ public class Telefone {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public Administrador getAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(Administrador administrador) {
+        this.administrador = administrador;
     }
 }

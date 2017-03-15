@@ -27,16 +27,19 @@ public abstract class Pessoa {
     @Column(length = 20, nullable = false, unique = true)
     private String login;
 
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false)
     private String senha;
 
     @Column(name = "criado_em", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate criadoEm;
 
     @Column(name = "atualizado_em")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate atualizadoEm;
 
     @Column(name = "removido_em")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate removidoEm;
 
     public Long getId() {
