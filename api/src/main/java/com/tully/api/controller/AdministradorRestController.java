@@ -68,6 +68,7 @@ public class AdministradorRestController {
             // recebe um objeto administrador somente com login e senha
             // no momento que ele é instanciado a senha é criptografada
             // bate no banco de dados pra saber se o login e a senha criptografada estão corretas
+            // teste
             if (administrador != null) {
                 String jwt;
                 JSONObject token = new JSONObject();
