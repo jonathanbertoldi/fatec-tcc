@@ -53,13 +53,12 @@ public class AdministradorDAO implements DAO<Administrador> {
         return administrador;
     }
 
-    public Administrador login(String login, String senha) {
+    public Administrador login(Administrador administrador) {
         TypedQuery<Administrador> query = manager.createQuery("SELECT a FROM Administrador a WHERE a.login = :login AND a.senha = :senha", Administrador.class);
-        query.setParameter("login", login);
-        query.setParameter("senha", senha);
+        query.setParameter("login", administrador.getLogin());
+        query.setParameter("senha", administrador.getSenha());
         try {
-            Administrador administrador = query.getSingleResult();
-            return administrador;
+            return query.getSingleResult();
         } catch (Exception e) {
             return null;
         }
