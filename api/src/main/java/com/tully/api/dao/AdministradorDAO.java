@@ -63,6 +63,4 @@ public class AdministradorDAO implements DAO<Administrador> {
             return null;
         }
     }
-
-
 }
