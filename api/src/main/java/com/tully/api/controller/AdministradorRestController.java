@@ -23,7 +23,6 @@ import static java.security.KeyRep.Type.SECRET;
 @RestController
 public class AdministradorRestController {
 
-    private static final Logger logger = Logger.getLogger(AdministradorRestController.class);
     public static final String ISSUER = "tully.com";
     public static final String SECRET = "segredo";
 

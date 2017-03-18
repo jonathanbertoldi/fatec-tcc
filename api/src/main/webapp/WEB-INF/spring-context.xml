@@ -40,5 +40,9 @@
         <property name="maxUploadSize" value="100000000"/>
     </bean>
 
+    <mvc:interceptors>
+        <bean class="com.tully.api.interceptor.InterceptorJWT" />
+    </mvc:interceptors>
+
     <tx:annotation-driven proxy-target-class="true"/>
 </beans>
