@@ -1,9 +1,12 @@
 package com.tully.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Desafio {
@@ -38,6 +41,23 @@ public class Desafio {
     @Column(name = "removido_em", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate removido_em;
+
+    public static JSONObject getJSONSimples(Desafio desafio) {
+        JSONObject retorno = new JSONObject();
+        retorno.put("id", desafio.getId_desafio());
+        retorno.put("nome", desafio.getNome());
+        retorno.put("pontuacao",desafio.getPontuacao());
+        retorno.put("local", desafio.getLocal());
+        return retorno;
+    }
+
+    public static JSONArray getListaJSONSimples(List<Desafio> desafios) {
+        JSONArray retorno = new JSONArray();
+        for (Desafio desafio: desafios) {
+            retorno.put(getJSONSimples(desafio));
+        }
+        return retorno;
+    }
 
 
     public Long getId_desafio() {

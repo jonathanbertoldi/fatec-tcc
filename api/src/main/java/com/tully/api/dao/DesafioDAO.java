@@ -2,6 +2,7 @@ package com.tully.api.dao;
 
 
 import com.tully.api.model.Desafio;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,7 @@ import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public class DesafioDAO implements DAO<Desafio> {
 
     @PersistenceContext
