@@ -20,13 +20,9 @@ class App extends Component {
 
 function mapStateToProps(state) {
     var { auth } = state;
-    var { isAuthenticated, isFetching, isFinished } = auth;
 
     return {
-        admins: state.admins,
-        isAuthenticated,
-        isFetching,
-        isFinished
+        auth
     }
 }
 

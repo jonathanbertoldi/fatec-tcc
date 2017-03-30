@@ -9,12 +9,21 @@ function authRequest(credentials) {
     }
 }
 
-function authSuccess(admin) {
+function authSuccess(token) {
     return {
         type: AUTH_SUCCESS,
         isFetching: false,
         isAuthenticated: true,
-        adminToken: admin.token
+        adminToken: token
+    }
+}
+
+function authFailure(message) {
+    return {
+        type: AUTH_FAILURE,
+        isFetching: false,
+        isAuthenticated: false,
+        message: message
     }
 }
 
@@ -35,9 +44,16 @@ export function loginAdmin(credentials) {
 
     return dispatch => {
         dispatch(authRequest(credentials));
-
         return fetch("http://localhost:8080/administradores/login", config)
-            .then(response => response.json())
-            .then(json => console.log(json))
+            .then(response => response.json().then(json => ({json, response})))
+            .then(({json, response}) => {
+                if (response.ok) {
+                    localStorage.setItem('adminToken', json.token)
+                    dispatch(authSuccess(json.token))
+                } else {
+                    dispatch(authFailure(json.message))
+                }
+            })    
+            .catch(error => console.log(error))
     }
 }

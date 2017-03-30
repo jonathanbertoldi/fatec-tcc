@@ -63,7 +63,6 @@ public class AdministradorRestController {
     @RequestMapping(value = "/administradores/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> login(@RequestBody Administrador administrador) {
         try {
-            administrador = administradorDAO.login(administrador);
             // recebe um objeto administrador somente com login e senha
             // no momento que ele é instanciado a senha é criptografada
             // bate no banco de dados pra saber se o login e a senha criptografada estão corretas
@@ -79,11 +78,14 @@ public class AdministradorRestController {
                 claims.put("iss", ISSUER);
                 claims.put("iat", iat);
                 claims.put("exp", exp);
+
                 jwt = signer.sign(claims);
                 token.put("token", jwt);
                 return ResponseEntity.ok(token.toString());
             } else {
-                return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+                JSONObject unauthMessage = new JSONObject();
+                unauthMessage.put("message", "Combinação inválida de usuário/senha.");
+                return new ResponseEntity<String>(unauthMessage.toString(), HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             e.printStackTrace();
