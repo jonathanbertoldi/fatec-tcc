@@ -1,4 +1,4 @@
-import { AUTH_SUCCESS, AUTH_REQUEST, AUTH_FAILURE } from './actionsTypes';
+import { AUTH_SUCCESS, AUTH_REQUEST, AUTH_FAILURE, LOGOUT_REQUEST, LOGOUT_SUCCESS } from './actionsTypes';
 
 function authRequest(credentials) {
     return {
@@ -27,6 +27,22 @@ function authFailure(message) {
     }
 }
 
+function logoutRequest() {
+  return {
+    type: LOGOUT_REQUEST,
+    isFetching: true,
+    isAuthenticated: true
+  }
+}
+
+function logoutSuccess() {
+  return {
+    type: LOGOUT_SUCCESS,
+    isFetching: false,
+    isAuthenticated: false
+  }
+}
+
 export function loginAdmin(credentials) {
     const body = {
         login: credentials.username,
@@ -52,8 +68,18 @@ export function loginAdmin(credentials) {
                     dispatch(authSuccess(json.token))
                 } else {
                     dispatch(authFailure(json.message))
+                    return Promise.reject(json);
                 }
+                return response;
             })    
             .catch(error => console.log(error))
     }
+}
+
+export function logoutAdmin() {
+  return dispatch => {
+    dispatch(logoutRequest())
+    localStorage.removeItem('adminToken')
+    dispatch(logoutSuccess())
+  }
 }

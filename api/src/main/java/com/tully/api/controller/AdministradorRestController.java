@@ -83,13 +83,17 @@ public class AdministradorRestController {
                 token.put("token", jwt);
                 return ResponseEntity.ok(token.toString());
             } else {
-                JSONObject unauthMessage = new JSONObject();
-                unauthMessage.put("message", "Combinação inválida de usuário/senha.");
-                return new ResponseEntity<String>(unauthMessage.toString(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<String>(createJSONMessage("Combinação inválida de usuário/senha").toString(), HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(createJSONMessage("Erro na requisição enviada ao servidor").toString(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private JSONObject createJSONMessage(String message) {
+        JSONObject r = new JSONObject();
+        r.put("message", message);
+        return r;
     }
 }

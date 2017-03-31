@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
+
+import { windowStyle, loginStyle, loginTitleStyle } from './style';
 
 class Login extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         // binds dos métodos da classe
-        this.handleLogin = this.handleLogin.bind(this);
+        this.handleRequestClose = this.handleReqeustClose.bind(this);
+        this.handleLogin        = this.handleLogin.bind(this);
 
         // state
         this.state = {
-            inputUserError: "",
-            inputPasswordError: ""
+            inputPasswordError: "",
+            inputUserError    : "",
+            snackbarOpen      : false
         }
     }
 
@@ -24,7 +29,8 @@ class Login extends Component {
                 username: this.refs.inputUser.getValue(),
                 password: this.refs.inputPassword.getValue()
             }
-            this.props.loginAdmin(credentials);
+            this.props.loginAdmin(credentials)
+                .then(() => console.log("Administrador logado com sucesso"), this.handleRequestClose);
         }
     }
 
@@ -48,25 +54,15 @@ class Login extends Component {
 
     clearInputErrors = () => this.setState({ inputUserError: "", inputPasswordError: "" });
 
+    handleRequestOpen = () => {
+        if (this.props.auth.errorMessage.length > 0) {
+            this.setState({ snackbarOpen : true });
+        }
+    }
+
+    handleReqeustClose = () => this.setState({ snackbarOpen: false });
+
     render() {
-        const windowStyle = {
-            height        : "100vh",
-            display       : "flex",
-            justifyContent: "center",
-            alignItems    : "center"
-        }
-
-        const loginStyle = {
-            display       : "flex",
-            flexWrap      : "wrap",
-            padding       : "20px",
-            justifyContent: "center"
-        }
-
-        const loginTitleStyle = {
-            textAlign: "center"
-        }
-
         return (
             <div style={ windowStyle } >
                 <div style={ loginStyle } >
@@ -84,10 +80,14 @@ class Login extends Component {
                         type="password" 
                         ref="inputPassword" />
                     <span style={{ margin: "10px", width: "100%" }}></span>
-                    <RaisedButton label="Log-in" 
+                    <RaisedButton label="Entrar" 
                         primary={true} 
                         fullWidth={true} 
                         onTouchTap={this.handleLogin} />
+                    <Snackbar open={this.state.snackbarOpen}
+                        message={this.props.auth.errorMessage}
+                        autoHideDuration={4000}
+                        onRequestClose={this.handleRequestClose} />
                 </div>
             </div>
         );

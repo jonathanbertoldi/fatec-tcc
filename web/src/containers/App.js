@@ -4,22 +4,25 @@ import { bindActionCreators } from 'redux';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import Login from '../components/Login';
-
 import * as authActions from '../actions/authActions';
+
+import Login from '../components/login/Login';
+import Layout from '../components/layout/Layout';
 
 class App extends Component {
     render() {
+        const { auth } = this.props;
+
         return (
             <MuiThemeProvider>
-                <Login {...this.props} />
+                { auth.isAuthenticated ? <Layout /> : <Login {...this.props} /> }
             </MuiThemeProvider>
         )
     }
 }
 
 function mapStateToProps(state) {
-    var { auth } = state;
+    const { auth } = state;
 
     return {
         auth
