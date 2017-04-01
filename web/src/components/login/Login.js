@@ -30,7 +30,7 @@ class Login extends Component {
                 password: this.refs.inputPassword.getValue()
             }
             this.props.loginAdmin(credentials)
-                .then(() => console.log("Administrador logado com sucesso"), this.handleRequestClose);
+                .then(() => console.log("Administrador logado com sucesso"), this.handleRequestOpen);
         }
     }
 

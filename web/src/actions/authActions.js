@@ -66,13 +66,13 @@ export function loginAdmin(credentials) {
                 if (response.ok) {
                     localStorage.setItem('adminToken', json.token)
                     dispatch(authSuccess(json.token))
+                    return Promise.resolve(json);
                 } else {
                     dispatch(authFailure(json.message))
                     return Promise.reject(json);
                 }
-                return response;
             })    
-            .catch(error => console.log(error))
+            .catch(error => Promise.reject())
     }
 }
 
