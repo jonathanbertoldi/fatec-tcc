@@ -15,7 +15,7 @@ class App extends Component {
 
         return (
             <MuiThemeProvider>
-                { auth.isAuthenticated ? <Layout {...this.props} /> : <Login {...this.props} /> }
+                { auth.isAuthenticated ? <Layout {...this.props} >{ this.props.children }</Layout> : <Login {...this.props} /> }
             </MuiThemeProvider>
         )
     }

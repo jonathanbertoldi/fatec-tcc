@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
+import { List, ListItem } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
 
 import IconButton from 'material-ui/IconButton';
 
 import PhotoCameraIcon from 'material-ui/svg-icons/image/add-a-photo';
 import Home from 'material-ui/svg-icons/action/home';
-import Social from 'material-ui/svg-icons/social/share';
+import People from 'material-ui/svg-icons/social/people';
+import Explore from 'material-ui/svg-icons/action/explore';
+import Security from 'material-ui/svg-icons/hardware/security';
 
 import AppBarIconMenu from './AppBarIconMenu';
 
@@ -47,6 +51,7 @@ class Layout extends Component {
 
     render() {
         const { logoutAdmin } = this.props;
+        const { drawerDocked, drawerOpen } = this.state;
 
         return (
             <div>
@@ -62,18 +67,28 @@ class Layout extends Component {
                         style={ { backgroundColor: "#FFF" } }
                         titleStyle={{ color: "#6F797E" }} 
                         iconElementLeft={ <IconButton><PhotoCameraIcon color={"#6F797E"} /></IconButton> } />
+                    
+                    <List>
+                        <ListItem onTouchTap={ this.toggleDrawer.bind(this) }
+                            leftIcon={<Home />}
+                            containerElement={<Link to="/" />} >Home</ListItem>
+                        <ListItem onTouchTap={ this.toggleDrawer.bind(this) } 
+                            leftIcon={<People />}
+                            containerElement={<Link to="/users" />} >Usuários</ListItem>
+                        <ListItem onTouchTap={ this.toggleDrawer.bind(this) }
+                            leftIcon={<Explore />}
+                            containerElement={<Link to="/challenges" />} >Desafios</ListItem>
+                        <ListItem onTouchTap={ this.toggleDrawer.bind(this) }
+                            leftIcon={<Security />}
+                            containerElement={<Link to="/admins" />} >Administradores</ListItem>
+                    </List>
 
-                    <Menu>
-                        <MenuItem onTouchTap={ this.toggleDrawer.bind(this) }
-                             leftIcon={<Home />} >Home</MenuItem>
-                        <MenuItem onTouchTap={ this.toggleDrawer.bind(this) } 
-                             leftIcon={<Social />}>Usuários</MenuItem>
-                        <MenuItem onTouchTap={ this.toggleDrawer.bind(this) } >Desafios</MenuItem>
-                        <MenuItem onTouchTap={ this.toggleDrawer.bind(this) } >Administradores</MenuItem>
-                    </Menu>
-
+                    <Divider />
+                    <Subheader>Tully &copy;</Subheader>
                 </Drawer>
-
+                <div style={ drawerDocked && drawerOpen ? {paddingLeft: "260px"} : {paddingLeft: "0px"} }>
+                    { this.props.children }
+                </div>
             </div>
             
         )

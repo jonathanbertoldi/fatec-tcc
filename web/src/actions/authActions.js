@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../constants/urls.js';
 import { AUTH_SUCCESS, AUTH_REQUEST, AUTH_FAILURE, LOGOUT_REQUEST, LOGOUT_SUCCESS } from './actionsTypes';
 
 function authRequest(credentials) {
@@ -60,7 +61,7 @@ export function loginAdmin(credentials) {
 
     return dispatch => {
         dispatch(authRequest(credentials));
-        return fetch("http://localhost:8080/administradores/login", config)
+        return fetch(API_BASE_URL + "/administradores/login", config)
             .then(response => response.json().then(json => ({json, response})))
             .then(({json, response}) => {
                 if (response.ok) {
