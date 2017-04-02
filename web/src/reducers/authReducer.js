@@ -36,7 +36,9 @@ function authReducer (state = {
         case LOGOUT_SUCCESS:
             return Object.assign({}, state, {
                 isFetching: false,
-                isAuthenticated: false
+                isAuthenticated: false,
+                adminToken: null,
+                adminCredentials: null
             })
         default:
             return state;

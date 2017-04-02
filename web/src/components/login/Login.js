@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -61,6 +62,12 @@ class Login extends Component {
     }
 
     handleReqeustClose = () => this.setState({ snackbarOpen: false });
+
+    componentWillMount() {
+        if (this.props.auth.isAuthenticated === false) {
+            browserHistory.push("/");
+        }
+    }
 
     render() {
         return (

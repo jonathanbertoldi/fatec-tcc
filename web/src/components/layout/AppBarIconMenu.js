@@ -15,7 +15,7 @@ class AppBarIconMenu extends Component {
                 targetOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }} >
                 <MenuItem primaryText="Sobre" />
-                <MenuItem primaryText="Sair" onTouchTap={onTouchLogout} />
+                <MenuItem primaryText="Sair" onTouchTap={ onTouchLogout } />
             </IconMenu>
         )
     }

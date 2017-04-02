@@ -23,7 +23,7 @@ class Layout extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            drawerOpen: false,
+            drawerOpen  : false,
             drawerDocked: false
         }
     }
@@ -40,7 +40,7 @@ class Layout extends Component {
     }
 
     mediaQueryChanged() {
-        this.setState({ drawerOpen: this.state.mql.matches });
+        this.setState({ drawerOpen  : this.state.mql.matches });
         this.setState({ drawerDocked: this.state.mql.matches });
     }
 
@@ -50,8 +50,8 @@ class Layout extends Component {
     }
 
     render() {
-        const { logoutAdmin } = this.props;
         const { drawerDocked, drawerOpen } = this.state;
+        const { logoutAdmin }              = this.props;
 
         return (
             <div>
@@ -69,6 +69,7 @@ class Layout extends Component {
                         iconElementLeft={ <IconButton><PhotoCameraIcon color={"#6F797E"} /></IconButton> } />
                     
                     <List>
+
                         <ListItem onTouchTap={ this.toggleDrawer.bind(this) }
                             leftIcon={<Home />}
                             containerElement={<Link to="/" />} >Home</ListItem>
@@ -81,12 +82,14 @@ class Layout extends Component {
                         <ListItem onTouchTap={ this.toggleDrawer.bind(this) }
                             leftIcon={<Security />}
                             containerElement={<Link to="/admins" />} >Administradores</ListItem>
+                            
                     </List>
 
                     <Divider />
+
                     <Subheader>Tully &copy;</Subheader>
                 </Drawer>
-                <div style={ drawerDocked && drawerOpen ? {paddingLeft: "260px"} : {paddingLeft: "0px"} }>
+                <div style={ drawerDocked && drawerOpen ? { paddingLeft: "260px" } : { paddingLeft: "0px" } }>
                     { this.props.children }
                 </div>
             </div>
