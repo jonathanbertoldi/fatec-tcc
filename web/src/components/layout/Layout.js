@@ -29,7 +29,7 @@ class Layout extends Component {
     }
 
     componentWillMount() {
-        const mql = window.matchMedia(`(min-width: 1000px)`);
+        const mql = window.matchMedia(`(min-width: 992px)`);
         mediaQueryChangedHandler = this.mediaQueryChanged.bind(this);
         mql.addListener(mediaQueryChangedHandler);
         this.setState({ mql: mql, drawerOpen: mql.matches, drawerDocked: mql.matches});
@@ -52,6 +52,15 @@ class Layout extends Component {
     render() {
         const { drawerDocked, drawerOpen } = this.state;
         const { logoutAdmin }              = this.props;
+
+        const windowStyle = {
+            paddingLeft: drawerDocked && drawerOpen ? "256px" : "0px"
+        }
+
+        const contentStyle = {
+            margin: drawerDocked && drawerOpen ? "48px 72px" : "24px",
+            padding: "0px 10px"
+        }
 
         return (
             <div>
@@ -82,15 +91,17 @@ class Layout extends Component {
                         <ListItem onTouchTap={ this.toggleDrawer.bind(this) }
                             leftIcon={<Security />}
                             containerElement={<Link to="/admins" />} >Administradores</ListItem>
-                            
+
                     </List>
 
                     <Divider />
 
                     <Subheader>Tully &copy;</Subheader>
                 </Drawer>
-                <div style={ drawerDocked && drawerOpen ? { paddingLeft: "260px" } : { paddingLeft: "0px" } }>
-                    { this.props.children }
+                <div style={ windowStyle }>
+                    <div style={ contentStyle }>
+                        { this.props.children }
+                    </div>
                 </div>
             </div>
             

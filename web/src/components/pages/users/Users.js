@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 
+import Divider from 'material-ui/Divider';
+
 class Users extends Component {
     render() {
         return (
             <div>
-                Users
+                <h2>Usuários</h2>
+                <Divider />
             </div>
         )
     }
