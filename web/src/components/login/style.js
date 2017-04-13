@@ -15,3 +15,7 @@ export const loginStyle = {
 export const loginTitleStyle = {
     textAlign     : "center"
 }
+
+export const logoStyle = {
+    width : "180px"
+}

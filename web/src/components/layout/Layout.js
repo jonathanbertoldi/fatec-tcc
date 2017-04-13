@@ -7,15 +7,14 @@ import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 
-import IconButton from 'material-ui/IconButton';
-
-import PhotoCameraIcon from 'material-ui/svg-icons/image/add-a-photo';
 import Home from 'material-ui/svg-icons/action/home';
 import People from 'material-ui/svg-icons/social/people';
 import Explore from 'material-ui/svg-icons/action/explore';
 import Security from 'material-ui/svg-icons/hardware/security';
 
 import AppBarIconMenu from './AppBarIconMenu';
+
+import Logo from '../../tully.svg';
 
 let mediaQueryChangedHandler;
 
@@ -62,6 +61,12 @@ class Layout extends Component {
             padding: "0px 10px"
         }
 
+        const iconLogoStyle = {
+            width: "40px",
+            paddingTop: "8px",
+            margin: "0px 6px 0px 4px"
+        }
+
         return (
             <div>
                 <AppBar title="Tully"
@@ -75,7 +80,7 @@ class Layout extends Component {
                     <AppBar title="Tully"
                         style={ { backgroundColor: "#FFF" } }
                         titleStyle={{ color: "#6F797E" }} 
-                        iconElementLeft={ <IconButton><PhotoCameraIcon color={"#6F797E"} /></IconButton> } />
+                        iconElementLeft={ <img src={ Logo } style={ iconLogoStyle } alt="Tully" /> } />
                     
                     <List>
 

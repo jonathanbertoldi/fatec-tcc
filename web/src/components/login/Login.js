@@ -5,7 +5,9 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 
-import { windowStyle, loginStyle, loginTitleStyle } from './style';
+import { windowStyle, loginStyle, loginTitleStyle, logoStyle } from './style';
+
+import Logo from '../../tully.svg';
 
 class Login extends Component {
 
@@ -74,8 +76,7 @@ class Login extends Component {
             <div style={ windowStyle } >
                 <div style={ loginStyle } >
                     <div style={ loginTitleStyle } >
-                        <h2>TULLY</h2>
-                        <h5>ADMIN</h5>
+                        <img src={ Logo } style={ logoStyle } alt="Tully" />
                     </div>
                     <TextField floatingLabelText="User" 
                         errorText={this.state.inputUserError} 
