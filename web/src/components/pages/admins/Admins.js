@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 
-import { Card, CardHeader } from 'material-ui/Card';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Add from 'material-ui/svg-icons/content/add';
+import FlatButton from 'material-ui/FlatButton';
+import { Card, CardHeader, CardActions } from 'material-ui/Card';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
 
+import PaginatedTable from '../../paginated-table/PaginatedTable';
 import PaginationFooter from '../../pagination-footer/PaginationFooter';
 
 class Admins extends Component {
@@ -12,23 +16,24 @@ class Admins extends Component {
         this.state = {
             tablePage: 0,
             tableOffset: 0,
-            tableLimit: 8,
+            tableLimit: 10,
             admins: this.generateAdmins()
         }
     }
 
     generateAdmins() {
         const admins = []
-            for (var i = 0; i<=100; i++) {
-                var admin = {
-                    id: i,
-                    name: "Adm ".concat(i),
-                    cpf: "111.111.111-11",
-                    email: "admin".concat(i).concat("@admin.com")
-                }
-                admins.push(admin);
+        for (var i = 0; i<=100; i++) {
+            var admin = {
+                id: i,
+                name: "Adm ".concat(i),
+                cpf: "111.111.111-11",
+                email: "admin".concat(i).concat("@admin.com")
             }
-        return admins;
+            admins.push(admin);
+        }
+        return [];
+        //return admins;
     }
 
     renderTableRow() {
@@ -92,10 +97,24 @@ class Admins extends Component {
     prevPage = () => this.setState({ tableOffset: this.state.tableOffset - this.state.tableLimit, tablePage: this.state.tablePage - 1 })
 
     render() {
+        const fabStyle = {
+            position: "fixed",
+            bottom: "30px",
+            right: "30px",
+            zIndex: "200"
+        }
+
+        const tableHeaders = ["Nome", "CPF", "E-Mail"];
+
         return (
             <div>
                 <Card>
-                    <CardHeader title="Consulta" subtitle="Administradores cadastrados" />>
+                    <CardHeader title="Consulta" subtitle="Administradores cadastrados" />
+                    <CardActions>
+                        <FlatButton label="Detalhes" />
+                        <FlatButton label="Alterar" />
+                        <FlatButton label="Remover" />
+                    </CardActions>
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -120,6 +139,18 @@ class Admins extends Component {
                         </TableFooter>
                     </Table>
                 </Card>
+                <br />
+                <br />
+                <Card>
+                    <CardHeader title="Teste" subtitle="Componentização" />
+                    <PaginatedTable listItems={ this.state.admins } 
+                        tableHeaders={ tableHeaders }
+                        limitPerTablePage={ 5 }
+                        noItemsMessage="Não tem adm aqui poar" />
+                </Card>
+                <FloatingActionButton style={ fabStyle }>
+                    <Add />
+                </FloatingActionButton>
             </div>
         )
     }

@@ -67,6 +67,12 @@ class Layout extends Component {
             margin: "0px 6px 0px 4px"
         }
 
+        const footerStyle = {
+            height: "120px",
+            width: "100%",
+            backgroundColor: "#212121"
+        }
+
         return (
             <div>
                 <AppBar title="Tully"
@@ -103,11 +109,14 @@ class Layout extends Component {
 
                     <Subheader>Tully &copy;</Subheader>
                 </Drawer>
+
                 <div style={ windowStyle }>
                     <div style={ contentStyle }>
                         { this.props.children }
                     </div>
+                    <footer style={ footerStyle }></footer>
                 </div>
+
             </div>
             
         )
