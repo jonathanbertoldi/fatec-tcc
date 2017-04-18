@@ -17,9 +17,9 @@ class PaginatedTable extends Component {
     renderTableHeader = () => (
         <TableHeader>
             <TableRow>
-                { this.props.tableHeaders.map((header, index) => (
+                { this.props.tableContent.map((content, index) => (
                     <TableHeaderColumn key={ index }>
-                        { header }    
+                        { content.columnName } 
                     </TableHeaderColumn>
                 )) }
             </TableRow>
@@ -57,15 +57,25 @@ class PaginatedTable extends Component {
             )
         }
 
+        var tableContent = this.props.tableContent;
+
         var pages = paginate(this.props.limitPerTablePage, this.props.listItems);
 
-        return pages[this.state.tablePage].items.map((item, index) => {
+        var tableRows = pages[this.state.tablePage].items.map((item, index) => {
             return (
                 <TableRow key={ index }>
-
+                    { tableContent.map((property, index) => (
+                        <TableRowColumn key={ index }>{ item[property.propertyName] }</TableRowColumn>
+                    )) }
                 </TableRow>
             )
-        })
+        });
+
+        return (
+            <TableBody>
+                { tableRows }
+            </TableBody>
+        ); 
     }
 
     nextPage = () => this.setState({ tableOffset: this.state.tableOffset + this.props.limitPerTablePage, tablePage: this.state.tablePage + 1 })
@@ -87,7 +97,7 @@ PaginatedTable.propTypes = {
     listItems: PropTypes.array.isRequired,
     limitPerTablePage: PropTypes.number.isRequired,
     noItemsMessage: PropTypes.string.isRequired,
-    tableHeaders: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired
+    tableContent: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
 }
 
 export default PaginatedTable;
