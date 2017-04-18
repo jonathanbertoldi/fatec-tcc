@@ -9,7 +9,7 @@ const styles = {
     float: 'right'
   },
   footerText: {
-    float: 'right',
+    float: 'left',
     paddingTop: '16px',
     height: '16px'
   }
@@ -21,7 +21,8 @@ class PaginationFooter extends Component {
     offset: PropTypes.number.isRequired, // current offset
     total: PropTypes.number.isRequired, // total number of rows
     limit: PropTypes.number.isRequired, // num of rows in each page
-    onPageClick: PropTypes.func.isRequired // what to do after clicking page number
+    onRightClick: PropTypes.func.isRequired, // what to do after clicking page number
+    onLeftClick: PropTypes.func.isRequired // what to do after clicking page number
   }
 
   render() {
@@ -30,10 +31,10 @@ class PaginationFooter extends Component {
 
     return (
         <div style={styles.footerContent}>
-          <IconButton disabled={offset === 0} onClick={this.props.onPageClick.bind(null, offset - limit)}>
+          <IconButton disabled={offset === 0} onClick={this.props.onLeftClick.bind(null, offset - limit)}>
             <ChevronLeft/>
           </IconButton>
-          <IconButton disabled={offset + limit >= total} onClick={this.props.onPageClick.bind(null, offset + limit)}>
+          <IconButton disabled={offset + limit >= total} onClick={this.props.onRightClick.bind(null, offset + limit)}>
             <ChevronRight/>
           </IconButton>
           <div style={styles.footerText}>
