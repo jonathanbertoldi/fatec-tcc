@@ -33,8 +33,8 @@ class Admins extends Component {
     render() {
         const fabStyle = {
             position: "fixed",
-            bottom: "30px",
-            right: "30px",
+            bottom: "14px",
+            right: "14px",
             zIndex: "200"
         }
 
@@ -55,7 +55,7 @@ class Admins extends Component {
                     </CardActions>
                     <PaginatedTable listItems={ this.state.admins } 
                         tableContent={ tableContent }
-                        limitPerTablePage={ 5 }
+                        limitPerTablePage={ 10 }
                         noItemsMessage="Não existe administradores cadastrados" />
                 </Card>
                 <FloatingActionButton style={ fabStyle }>

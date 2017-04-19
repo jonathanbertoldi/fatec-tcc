@@ -57,7 +57,7 @@ class Layout extends Component {
         }
 
         const contentStyle = {
-            margin: drawerDocked && drawerOpen ? "48px 72px" : "24px",
+            margin: drawerDocked && drawerOpen ? "48px 82px" : "24px",
             padding: "0px 10px"
         }
 
@@ -65,12 +65,6 @@ class Layout extends Component {
             width: "40px",
             paddingTop: "8px",
             margin: "0px 6px 0px 4px"
-        }
-
-        const footerStyle = {
-            height: "120px",
-            width: "100%",
-            backgroundColor: "#212121"
         }
 
         return (
@@ -114,7 +108,6 @@ class Layout extends Component {
                     <div style={ contentStyle }>
                         { this.props.children }
                     </div>
-                    <footer style={ footerStyle }></footer>
                 </div>
 
             </div>

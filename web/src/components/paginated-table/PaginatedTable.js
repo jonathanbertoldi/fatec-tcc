@@ -27,7 +27,7 @@ class PaginatedTable extends Component {
     );
 
     renderTableFooter = () => (
-        <TableFooter>
+        <TableFooter adjustForCheckbox={ false }>
             <TableRow>
                 <TableRowColumn>
                     <PaginatedTableFooter offset={ this.state.tableOffset }
@@ -94,7 +94,7 @@ class PaginatedTable extends Component {
 }
 
 PaginatedTable.propTypes = {
-    listItems: PropTypes.array.isRequired,
+    listItems: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
     limitPerTablePage: PropTypes.number.isRequired,
     noItemsMessage: PropTypes.string.isRequired,
     tableContent: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired

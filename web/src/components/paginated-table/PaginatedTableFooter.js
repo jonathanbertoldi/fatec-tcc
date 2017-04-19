@@ -5,10 +5,10 @@ import IconButton from 'material-ui/IconButton';
 
 const styles = {
   footerContent: {
-    float: 'right'
+    display: 'flex',
+    justifyContent: 'center'
   },
   footerText: {
-    float: 'left',
     paddingTop: '16px',
     height: '16px'
   }
@@ -30,15 +30,15 @@ class PaginationFooter extends Component {
 
     return (
         <div style={styles.footerContent}>
+          <div style={styles.footerText}>
+            {Math.min((offset + 1), total) + '-' + Math.min((offset + limit), total) + ' of ' + total}
+          </div>
           <IconButton disabled={offset === 0} onClick={this.props.onLeftClick.bind(null, offset - limit)}>
             <ChevronLeft/>
           </IconButton>
           <IconButton disabled={offset + limit >= total} onClick={this.props.onRightClick.bind(null, offset + limit)}>
             <ChevronRight/>
           </IconButton>
-          <div style={styles.footerText}>
-            {Math.min((offset + 1), total) + '-' + Math.min((offset + limit), total) + ' of ' + total}
-          </div>
         </div>
     );
   }
