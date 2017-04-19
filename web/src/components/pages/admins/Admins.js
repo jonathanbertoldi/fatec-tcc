@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as adminActions from '../../../actions/adminActions';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Add from 'material-ui/svg-icons/content/add';
@@ -12,22 +16,13 @@ class Admins extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            admins: this.generateAdmins()
+            admins: []
         }
     }
 
-    generateAdmins() {
-        const admins = []
-        for (var i = 0; i<100; i++) {
-            var admin = {
-                id: i,
-                name: "Adm ".concat(i),
-                cpf: "111.111.111-11",
-                email: "admin".concat(i).concat("@admin.com")
-            }
-            admins.push(admin);
-        }
-        return admins;
+    componentDidMount() {
+        this.props.getAdmins()
+            .then(() => this.setState({ admins: this.props.admin.admins }));
     }
 
     render() {
@@ -39,7 +34,7 @@ class Admins extends Component {
         }
 
         const tableContent = [
-            { propertyName: 'name', columnName: 'Nome' },
+            { propertyName: 'nome', columnName: 'Nome' },
             { propertyName: 'cpf', columnName: 'CPF' },
             { propertyName: 'email', columnName: 'E-Mail' }
         ];
@@ -66,4 +61,16 @@ class Admins extends Component {
     }
 }
 
-export default Admins;
+function mapStateToProps(state) {
+    const { admin } = state;
+
+    return {
+        admin
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(adminActions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Admins);
