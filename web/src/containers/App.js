@@ -6,7 +6,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import * as authActions from '../actions/authActions';
 
-import Login from '../components/login/Login';
+import Login from './pages/login/Login';
 import Layout from '../components/layout/Layout';
 
 class App extends Component {
@@ -15,7 +15,7 @@ class App extends Component {
 
         return (
             <MuiThemeProvider>
-                { auth.isAuthenticated ? <Layout {...this.props} >{ this.props.children }</Layout> : <Login {...this.props} /> }
+                { auth.isAuthenticated ? <Layout {...this.props} >{ this.props.children }</Layout> : <Login /> }
             </MuiThemeProvider>
         )
     }

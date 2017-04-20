@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -9,27 +10,19 @@ import Add from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardHeader, CardActions } from 'material-ui/Card';
 
-import PaginatedTable from '../../paginated-table/PaginatedTable';
+import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 
 class Admins extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            admins: []
-        }
-    }
-
     componentDidMount() {
-        this.props.getAdmins()
-            .then(() => this.setState({ admins: this.props.admin.admins }));
+        this.props.getAdmins();
     }
 
     render() {
         const fabStyle = {
             position: "fixed",
-            bottom: "14px",
-            right: "14px",
+            bottom: "16px",
+            right: "16px",
             zIndex: "200"
         }
 
@@ -42,18 +35,19 @@ class Admins extends Component {
         return (
             <div>
                 <Card>
-                    <CardHeader title="Consulta" subtitle="Administradores cadastrados" />
+                    <CardHeader title="Consulta" subtitle="Administradores" />
                     <CardActions>
                         <FlatButton label="Detalhes" />
                         <FlatButton label="Alterar" />
                         <FlatButton label="Remover" />
                     </CardActions>
-                    <PaginatedTable listItems={ this.state.admins } 
+                    <PaginatedTable listItems={ this.props.admin.admins } 
                         tableContent={ tableContent }
                         limitPerTablePage={ 10 }
                         noItemsMessage="Não existe administradores cadastrados" />
                 </Card>
-                <FloatingActionButton style={ fabStyle }>
+                <FloatingActionButton style={ fabStyle }
+                     containerElement={<Link to="/admins/create" />} >
                     <Add />
                 </FloatingActionButton>
             </div>
@@ -63,7 +57,6 @@ class Admins extends Component {
 
 function mapStateToProps(state) {
     const { admin } = state;
-
     return {
         admin
     }

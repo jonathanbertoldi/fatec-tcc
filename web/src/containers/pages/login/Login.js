@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
+
+import * as authActions from '../../../actions/authActions';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -7,7 +11,7 @@ import Snackbar from 'material-ui/Snackbar';
 
 import { windowStyle, loginStyle, loginTitleStyle, logoStyle } from './style';
 
-import Logo from '../../tully.svg';
+import Logo from '../../../tully.svg';
 
 class Login extends Component {
 
@@ -102,4 +106,16 @@ class Login extends Component {
     }
 }
 
-export default Login;
+function mapStateToProps(state) {
+    const { auth } = state;
+
+    return {
+        auth
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(authActions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -2,6 +2,7 @@ import { GET_ADMINS_REQUEST, GET_ADMINS_SUCCESS, GET_ADMINS_FAILURE } from '../a
 
 function adminReducer(state = {
     isFetching: false,
+    admins: [],
     errorMessage: ''
 }, action) {
     switch(action.type) {
