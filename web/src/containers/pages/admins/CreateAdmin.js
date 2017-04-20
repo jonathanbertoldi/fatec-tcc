@@ -39,7 +39,10 @@ class CreateAdmin extends Component {
                     <TextField floatingLabelText="CPF" 
                         errorText={ this.state.inputErrors.cpf }
                         ref="inputName" />
-                    <DatePicker floatingLabelText="Data de Nascimento" />
+                    <DatePicker floatingLabelText="Data de Nascimento" 
+                        cancelLabel="Cancelar"
+                        DateTimeFormat={ global.Intl.DateTimeFormat } 
+                        locale="pt-BR" />
                     <TextField floatingLabelText="Login" 
                         errorText={ this.state.inputErrors.login }
                         ref="inputName" />
