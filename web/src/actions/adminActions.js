@@ -86,7 +86,7 @@ export function getAddress(cep) {
             .then(({json,response}) => {
                 if (response.ok) {
                     if (json.erro) {
-                        throw new Error("Não foi possível localizar o CEP informado");
+                        throw new Error("O CEP informado não existe");
                     } else {
                         dispatch(getAddressSuccess(json));
                     }

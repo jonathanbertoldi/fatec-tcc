@@ -27,9 +27,9 @@ class CreateAdmin extends Component {
         this.state = {
             stepIndex: 1,
             finished: false,
+            address: this.emptyAddress,
             phones: [],
             selectedItem: null,
-            snackbarOpen: false,
             inputNameError: "",
             inputEmailError: "",
             inputCpfError: "",
@@ -41,6 +41,16 @@ class CreateAdmin extends Component {
             inputPhoneTypeError: "",
             inputPhoneNumberError: ""
         }
+    }
+
+    emptyAddress = {
+        logradouro: "",
+        cep: "",
+        complemento: "",
+        numero: "",
+        estado: "",
+        cidade: "",
+        bairro: ""
     }
 
     handleNextStep = () => {
@@ -91,8 +101,8 @@ class CreateAdmin extends Component {
             return (
                 <div key={ index }>
                     <ListItem rightIconButton={ <IconButton onTouchTap={() => this.handleDeletePhone(index)}><Remove /></IconButton> }
-                        primaryText={ phone.number }
-                        secondaryText={ phone.type } />
+                        primaryText={ phone.numero }
+                        secondaryText={ phone.descricao } />
                     { index === this.state.phones.length - 1 ? null : <Divider/>}
                 </div>
             )
@@ -122,8 +132,8 @@ class CreateAdmin extends Component {
     handleAddPhone = () => {
         if (this.validatePhoneInputs()) {
             const phone = {
-                type: this.refs.inputPhoneType.props.children[this.state.selectedItem].props.primaryText,
-                number: this.refs.inputPhoneNumber.state.value
+                descricao: this.refs.inputPhoneType.props.children[this.state.selectedItem].props.primaryText,
+                numero: this.refs.inputPhoneNumber.state.value
             };
             var phones = this.state.phones.slice();
             phones.push(phone);
@@ -147,10 +157,28 @@ class CreateAdmin extends Component {
         this.clearCepError();
         var r = true;
         if (!this.isCepValid()) {
-            this.setState({ inputAddressCepError: "Insira um CEP válido" });
+            this.setState({ inputAddressCepError: "Insira um CEP válido", address: this.emptyAddress });
             r = false;
         }
         return r;
+    }
+
+    cepNotFound = () => {
+        this.setState({ inputAddressCepError: this.props.admin.viaCepError })
+        this.setState({ address: this.emptyAddress });
+    }
+
+    cepFound = () => {
+        const viaCepAddress = this.props.admin.address;
+        const address = {
+            logradouro: viaCepAddress.logradouro,
+            cep: this.refs.inputCep.state.value,
+            complemento: viaCepAddress.complemento,
+            estado: viaCepAddress.uf,
+            cidade: viaCepAddress.localidade,
+            bairro: viaCepAddress.bairro
+        }
+        this.setState({ address: address });
     }
 
     handleGetAddress = () => {
@@ -158,7 +186,7 @@ class CreateAdmin extends Component {
             var cep = this.refs.inputCep.state.value;
             cep = cep.replace('-', '');
             this.props.getAddress(cep)
-                .then(() => console.log("foi"), () => console.log("numfoi"));
+                .then(this.cepFound, this.cepNotFound);
         }
     }
 
@@ -245,31 +273,36 @@ class CreateAdmin extends Component {
                                         <TextField floatingLabelText="Logradouro" 
                                             disabled={ true }
                                             fullWidth={ true }
+                                            value={ this.state.address.logradouro }
                                             ref="inputStreet" />
                                     </div>
                                     <div style={ formItemRowStyle }>
                                         <TextField floatingLabelText="Complemento" 
                                             disabled={ true }
-                                            fullWidth={ true }                                    
+                                            fullWidth={ true }
+                                            value={ this.state.address.complemento }                 
                                             ref="inputComplement" />
                                     </div>
                                     <div style={ formItemRowStyle }>
                                         <div style={ formItemRowColumnStyle }>
                                             <TextField floatingLabelText="Cidade" 
                                                 disabled={ true }
-                                                fullWidth={ true }                                    
+                                                fullWidth={ true }   
+                                                value={ this.state.address.cidade }                 
                                                 ref="inputCity" />
                                         </div>
                                         <div style={ formItemRowColumnStyle }>
                                             <TextField floatingLabelText="Estado" 
                                                 disabled={ true }
-                                                fullWidth={ true }                                    
+                                                fullWidth={ true }
+                                                value={ this.state.address.estado }
                                                 ref="inputState" />
                                         </div>
                                         <div style={ formItemRowColumnStyle }>
                                             <TextField floatingLabelText="Bairro" 
                                                 disabled={ true }
-                                                fullWidth={ true }                                    
+                                                fullWidth={ true }
+                                                value={ this.state.address.bairro }                        
                                                 ref="inputNeighborhood" />
                                         </div>
                                     </div>
