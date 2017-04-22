@@ -15,6 +15,8 @@ import Add from 'material-ui/svg-icons/content/add';
 import Remove from 'material-ui/svg-icons/action/delete';
 import Divider from 'material-ui/Divider';
 import { List, ListItem } from 'material-ui/List';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 import { formItemRowStyle, formItemRowColumnStyle, formItemRowOneFourthStyle, formItemRowThreeFourthStyle } from './style';
 import MaskedTextField from '../../../components/masked-text-field/MaskedTextField';
@@ -23,21 +25,19 @@ class CreateAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            stepIndex: 2,
+            stepIndex: 1,
             finished: false,
-            phones: [
-                { type: "Residencial", number: "(11) 2962-5118" },
-                { type: "Celular", number: "(11) 96595-6795" }
-            ],
-            selectedItem: 0,
+            phones: [],
+            selectedItem: null,
+            snackbarOpen: false,
             inputNameError: "",
             inputEmailError: "",
             inputCpfError: "",
             inputBirthDateError: "",
             inputLoginError: "",
             inputPasswordError: "",
-            inputAddresCepError: "",
-            inputAddresNumberError: "",
+            inputAddressCepError: "",
+            inputAddressNumberError: "",
             inputPhoneTypeError: "",
             inputPhoneNumberError: ""
         }
@@ -57,6 +57,8 @@ class CreateAdmin extends Component {
             this.setState({stepIndex: stepIndex - 1});
         }
     };
+
+    handleSelectChange = (event, index, value) => this.setState({ selectedItem: value })
 
     renderStepActions(step) {
         const {stepIndex} = this.state;
@@ -88,7 +90,7 @@ class CreateAdmin extends Component {
         return this.state.phones.map((phone, index) => {
             return (
                 <div key={ index }>
-                    <ListItem rightIconButton={ <IconButton><Remove /></IconButton> }
+                    <ListItem rightIconButton={ <IconButton onTouchTap={() => this.handleDeletePhone(index)}><Remove /></IconButton> }
                         primaryText={ phone.number }
                         secondaryText={ phone.type } />
                     { index === this.state.phones.length - 1 ? null : <Divider/>}
@@ -99,9 +101,65 @@ class CreateAdmin extends Component {
 
     clearPhoneInputErrors = () => this.setState({ inputPhoneNumberError: "", inputPhoneTypeError: "" })
 
+    isPhoneTypeValid = () => this.state.selectedItem !== null;
+
+    isPhoneNumberValid = () => this.refs.inputPhoneNumber.state.value.length >= 13
+
     validatePhoneInputs = () => {
         this.clearPhoneInputErrors();
-        
+        var r = true
+        if (!this.isPhoneTypeValid()) {
+            this.setState({ inputPhoneTypeError: "Selecione um tipo válido" })
+            r = false;
+        }
+        if (!this.isPhoneNumberValid()) {
+            this.setState({ inputPhoneNumberError: "Insira um número de telefone válido" })
+            r = false;
+        }
+        return r;
+    }
+
+    handleAddPhone = () => {
+        if (this.validatePhoneInputs()) {
+            const phone = {
+                type: this.refs.inputPhoneType.props.children[this.state.selectedItem].props.primaryText,
+                number: this.refs.inputPhoneNumber.state.value
+            };
+            var phones = this.state.phones.slice();
+            phones.push(phone);
+            this.setState({ phones: phones })
+            this.setState({ selectedItem: null })
+            this.refs.inputPhoneNumber.state.value = ""
+        }
+    }
+
+    handleDeletePhone = (index) => {
+        var phones = this.state.phones.slice();
+        phones.splice(index, 1);
+        this.setState({ phones });
+    }
+
+    clearCepError = () => this.setState({ inputAddressCepError: "" });
+
+    isCepValid = () => this.refs.inputCep.state.value.length === 9
+
+    validateAddressCep = () => {
+        this.clearCepError();
+        var r = true;
+        if (!this.isCepValid()) {
+            this.setState({ inputAddressCepError: "Insira um CEP válido" });
+            r = false;
+        }
+        return r;
+    }
+
+    handleGetAddress = () => {
+        if (this.validateAddressCep()) {
+            var cep = this.refs.inputCep.state.value;
+            cep = cep.replace('-', '');
+            this.props.getAddress(cep)
+                .then(() => console.log("foi"), () => console.log("numfoi"));
+        }
     }
 
     render() {
@@ -171,7 +229,8 @@ class CreateAdmin extends Component {
                                             <MaskedTextField floatingLabelText="CEP" 
                                                 defaultValue=""
                                                 mask="99999-999"
-                                                errorText={ this.state.inputAddresCepError }
+                                                onBlur={ this.handleGetAddress.bind(this) }
+                                                errorText={ this.state.inputAddressCepError }
                                                 fullWidth={ true }
                                                 ref="inputCep" />
                                         </div>
@@ -222,20 +281,28 @@ class CreateAdmin extends Component {
                                 <StepContent>
                                     <div style={ formItemRowStyle } >
                                         <div style={ formItemRowOneFourthStyle }>
-                                            <TextField floatingLabelText="Descrição"
+                                            <SelectField floatingLabelText="Tipo"
+                                                value={ this.state.selectedItem }
+                                                onChange={ this.handleSelectChange }
                                                 errorText={ this.state.inputPhoneTypeError }
-                                                fullWidth={ true } />
+                                                labelStyle={{paddingTop: "4px"}}
+                                                ref="inputPhoneType"
+                                                fullWidth={ true }>
+                                                <MenuItem value={ 0 } primaryText="Residencial" />
+                                                <MenuItem value={ 1 } primaryText="Celular" />
+                                            </SelectField>
                                         </div>
                                         <div style={ formItemRowThreeFourthStyle}>
                                             <MaskedTextField floatingLabelText="Número" 
                                                 mask="(99) 999999999"
                                                 defaultValue=""
                                                 errorText={ this.state.inputPhoneNumberError }
+                                                ref="inputPhoneNumber"
                                                 fullWidth={ true } />
                                         </div>
                                     </div>
                                     <div style={ formItemRowStyle }>
-                                        <IconButton onTouchTap={this.validatePhoneInputs.bind(this)}>
+                                        <IconButton onTouchTap={this.handleAddPhone.bind(this)}>
                                             <Add />
                                         </IconButton>
                                     </div>
